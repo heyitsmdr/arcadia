@@ -13,8 +13,30 @@ to add/remove commands from the default lineup. You can create your
 own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 
 """
-
+from functools import wraps
 from evennia import default_cmds
+
+
+def check_errors(func):
+    """
+    Decorator for catching/printing out any errors in method calls. Designed for safer imports.
+    Args:
+        func: Function to decorate
+    Returns:
+        Wrapped function
+    """
+    # noinspection PyBroadException
+    @wraps(func)
+    def new_func(*args, **kwargs):
+        """Wrapper around function with exception handling"""
+        try:
+            return func(*args, **kwargs)
+        except Exception:
+            import traceback
+
+            traceback.print_exc()
+
+    return new_func
 
 
 class CharacterCmdSet(default_cmds.CharacterCmdSet):
@@ -34,6 +56,13 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
         #
         # any commands you add below will overload the default ones.
         #
+        self.add_general_cmdsets()
+
+    @check_errors
+    def add_general_cmdsets(self):
+        """Add general commands that all characters should have."""
+        from .base_commands import general
+        self.add(general.CmdPoke)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):
