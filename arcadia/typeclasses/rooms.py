@@ -6,6 +6,7 @@ Rooms are simple containers that has no location of their own.
 """
 
 from evennia import DefaultRoom
+from world.map import Map
 
 
 class Room(DefaultRoom):
@@ -18,5 +19,12 @@ class Room(DefaultRoom):
     See examples/object.py for a list of
     properties and methods available on all Objects.
     """
+
+    def return_appearance(self, looker):
+        string = ""
+        if looker.db.map_enabled:
+            string += "%s\n" % Map(looker).show_map()
+        string += super().return_appearance(looker)
+        return string
 
     pass

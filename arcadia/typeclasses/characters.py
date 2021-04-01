@@ -30,5 +30,7 @@ class Character(DefaultCharacter):
     at_post_puppet - Echoes "AccountName has entered the game" to the room.
 
     """
+    def at_object_creation(self):
+        self.db.map_enabled = True
 
     pass

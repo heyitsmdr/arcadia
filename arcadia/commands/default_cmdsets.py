@@ -16,7 +16,6 @@ own cmdsets by inheriting from them or directly from `evennia.CmdSet`.
 from functools import wraps
 from evennia import default_cmds
 
-
 def check_errors(func):
     """
     Decorator for catching/printing out any errors in method calls. Designed for safer imports.
@@ -61,8 +60,10 @@ class CharacterCmdSet(default_cmds.CharacterCmdSet):
     @check_errors
     def add_general_cmdsets(self):
         """Add general commands that all characters should have."""
-        from .base_commands import general
+        from commands.base_commands import general
+        from world.map import CmdMap
         self.add(general.CmdPoke)
+        self.add(CmdMap)
 
 
 class AccountCmdSet(default_cmds.AccountCmdSet):
